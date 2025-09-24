@@ -57,7 +57,7 @@ class HostBasedUnitTestRunner(IUefiBuildPlugin):
         shell_env.set_shell_var('GTEST_CATCH_EXCEPTIONS', '0')
 
         # Disable address sanitizer memory leak detection
-        shell_env.set_shell_var('ASAN_OPTIONS', 'detect_leaks=0')
+        shell_env.set_shell_var('ASAN_OPTIONS', 'detect_leaks=0:verify_asan_link_order=false')
 
         # Set up the reporting type for Cmocka.
         shell_env.set_shell_var('CMOCKA_MESSAGE_OUTPUT', 'xml')
@@ -117,9 +117,7 @@ class HostBasedUnitTestRunner(IUefiBuildPlugin):
                     'GTEST_OUTPUT', "xml:" + test + ".GTEST." + arch + ".result.xml")
 
                 # Run the test.
-                ld_debug_env = dict(os.environ)
-                ld_debug_env['LD_DEBUG'] = 'all'
-                ret = RunCmd('"' + test + '"', "", workingdir=cp, environ=ld_debug_env)
+                ret = RunCmd('"' + test + '"', "", workingdir=cp)
                 if ret != 0:
                     logging.error("UnitTest Execution Error: " +
                                   os.path.basename(test))
