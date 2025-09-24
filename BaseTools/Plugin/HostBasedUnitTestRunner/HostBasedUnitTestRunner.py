@@ -116,7 +116,9 @@ class HostBasedUnitTestRunner(IUefiBuildPlugin):
                     'GTEST_OUTPUT', "xml:" + test + ".GTEST." + arch + ".result.xml")
 
                 # Run the test.
-                ret = RunCmd('"' + test + '"', "", workingdir=cp)
+                ld_debug_env = dict(os.environ)
+                ld_debug_env['LD_DEBUG'] = 'all'
+                ret = RunCmd('"' + test + '"', "", workingdir=cp, environ=ld_debug_env)
                 if ret != 0:
                     logging.error("UnitTest Execution Error: " +
                                   os.path.basename(test))
