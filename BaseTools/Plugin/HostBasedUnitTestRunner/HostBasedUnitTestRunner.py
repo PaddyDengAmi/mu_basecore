@@ -106,6 +106,7 @@ class HostBasedUnitTestRunner(IUefiBuildPlugin):
                     """).strip())
                 return 0
 
+            RunCmd("env", "")
             error_messages = []  # MU_CHANGE- Check for invalid tests
             for test in testList:
                 # Configure output name if test uses cmocka.
